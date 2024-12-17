@@ -1,0 +1,46 @@
+site_name: Prácticas en AWS para ASIR
+use_directory_urls: false
+
+theme:
+    language: es
+    name: "material"
+    favicon: "images/favicon.png"
+    palette:
+        - scheme: default
+          primary: indigo
+          accent: "light blue"
+          toggle:
+            icon: material/toggle-switch-off-outline
+            name: Cambiar a modo noche
+        - scheme: slate 
+          primary: indigo
+          accent: "light blue"
+          toggle:
+            icon: material/toggle-switch
+            name: Cambiar a modo día
+    font:
+        text: Roboto
+        code: Roboto Mono
+    logo: "images/logoIABD3.png"
+    features:
+        - header.autohide
+        - navigation.top
+        - navigation.tracking
+        - navigation.footer
+        - navigation.indexes
+        - content.code.annotate
+        - announce.dismiss
+        - toc.follow
+        - content.code.copy
+
+extra_css:
+  - css/extra.css
+
+extra:
+  search:
+    language: "es"
+
+markdown_extensions:
+  - def_list
+  - pymdownx.tasklist:
+      custom_checkbox: true
