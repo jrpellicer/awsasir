@@ -26,61 +26,46 @@ En esta práctica vamos a crear en la nube una máquina virtual de Windows Serve
 
 ## Práctica a Realizar
 
-1.  Empezamos creando un grupo de recursos con el nombre que queramos, por ejemplo *practica-1*.
+1.- Vamos a crear directamente una máquina en la red virtual (VPC) creada por defecto. Para ello accedemos directamente al servicio de máquinas virtuales de AWS llamado EC2 (Amazon Elastic Compute Cloud).
 
-{: .warning }
-Es importante que todos los recursos que creemos a continuación estén en la misma Región que nuestro grupo de recursos. Si se nos cambia automáticamente al crear un recurso, deberemos cambiarlo de forma manual. Esto suele pasar al elegir la imagen durante el proceso de creación de una máquina virtual.  
+- Buscamos el servicio **EC2** en la consola.
+- Accedemos y pulsamos sobre **Lanzar la Instancia**.
+
+!!! note "Nota"
+    
+    Tenemos una red creada de manera predeterminada con una dirección de red **172.31.0.0/16**, la cual tiene 6 subredes ubicadas en 6 zonas de disponibilidad distintas de la región en la que se lanza el laboratorio (Norte de Virginia: *us-east-1*). Vamos a crear la máquina en esta red por defecto.
+
+___
+
+
+2.- Para lanzar la instancia EC2 es necesario asignarle una serie de parámetros obligatorios y configurar otros opcionales.
+
+- El nombre del equipo será *W2025*
+- Seleccionamos una imagen (AMI) de *Microsoft Windows Server 2025 Base*.
+- En el tamaño de la máquina seleccionamos un tipo de instancia *t3.medium* (2 CPUS y 4 GiB de RAM)
+- En el par de claves podemos elegir entre crear un nuevo par de claves o utilizar las ya creadas de nuestro laboratorio (*vockey*). Seleccionamos las ya creadas *vockey*.
+- En la configuración de red pulsamos en Editar:
+    - Dejamos la VPC (la red virtual) predeterminada.
+    - Seleccionamos una subred (por ejemplo la asociada a la zona de disponibilidad 2 cuyo nombre es *us-east-1b* y su dirección de red es *172.13.16.0/20*)
+    - Habilitamos la asignación de una IP Pública para conectarnos desde Internet a esta máquina.
+    - Creamos un grupo de seguridad (reglas de firewall) nuevo y lo llamamos *acceso-remoto* y le ponemos una descripción (*acceso remoto a W2025*)
+    - Como regla de entrada dejamos la que viene por defecto que habilita el *puerto 3389 (RDP)* desde *cualquier lugar* de Internet (0.0.0.0/0)
+- Dejamos las opciones de almacenamiento que nos propone por defecto: 30GiB en un disco *SSD de uso general*.
+- Lanzamos la instancia.
 
 ___
 
 
-2.  Creamos la máquina Windows 11:
+Tras unos minutos se nos crea la instancia, y con ella los siguientes recursos que podemos comprobar.
+
+3.- Accede al panel principal de EC2.
+
+<img src="./images/creacion_MV_01.jpg">
 
 
+Comprueba pinchando sobre el enlace correspondiente que se ha creado:
 
-* El tamaño de la máquina será el mínimo para poder correr Windows 11 (4GiB RAM).
-* No será necesaria redundancia en las zonas de disponibilidad. 
-* El nombre del equipo será *w11*.
-* Por motivos de coste, el disco duro del sistema será de tipo HDD Estándar.
-* En el apartado Redes nos propone crear una red nueva llamada *w11-vnet*  con un espacio de direcciones 10.0.0.0/16 y una subred llamada *default* 10.0.0.0/24. Aceptamos la propuesta por defecto.
-* También nos propone crear una nueva IP Pública con nombre por defecto *w11-ip*. También aceptamos la propuesta por defecto.
-* Hemos de asegurarnos al crear la máquina que habilitamos el puerto para RDP (3389). Eso nos creará un Grupo de Seguridad (nsg) con el puerto 3389 abierto desde todas las direcciones.  
+- Una **instancia** (máquina).
+- Un **volumen EBS** (disco duro).
+- 2 **Grupos de seguridad** (el que venía por defecto y el que hemos creado llamado *acceso-remoto*).
 
-___
-
-{:style="counter-reset:none"}
-
-3. Una vez finalizada la implementación, ve al grupo de recursos *practica-1* y comprueba todos los recursos creados. Si todo ha ido bien se nos han debido crear los siguientes 6 recursos en nuestro Grupo de Recursos *practica-1*: (compáralos con el esquema del enunciado)
-- Una máquina virtual (*w11*).
-- Una red virtual (*w11-vnet*).
-- Un grupo de seguridad (*w11-nsg*).
-- Una IP Pública (*W11-ip*).
-- Un disco duro (*w11_disk1_XXXXXXXX*). (No aparece en el esquema del enunciado)
-- Una tarjeta de red (*w11XXX*). (No aparece en el esquema del enunciado)
-
-___
-
-{:style="counter-reset:none"}
-
-4.	Vamos a hacer una serie de comprobaciones para ver que todo está correcto. Viendo todos los recursos creados en *practica-1*:
-- En primer lugar, pincha sobre la dirección IP Pública y anota la IP asignada a la máquina.
-- En el grupo de seguridad, asegúrate que en la información esencial aparece como que hay asociada una interface de red (*w11XXX*) y que hay una regla de entrada para el puerto 3389 con cualquier origen.
-- Aún en el grupo de seguridad, en el menú de la izquierda **Interfaces de red** comprueba la IP interna y externa asociada a cada tarjeta de red, así como a la máquina conectada.
-
-___
-
-{:style="counter-reset:none"}
-
-5.	Con la máquina arrancada, conéctate a ella desde tu ordenador mediante conexión de escritorio remoto.
-
-___
-
-{:style="counter-reset:none"}
-
-6.	Comprueba desde el sistema operativo la IP Privada automática que se le ha asignado a la máquina dentro de la red virtual.
-
-___
-
-{:style="counter-reset:none"}
-
-7.	Apaga la máquina y **elimina el grupo de recursos creado en el primer punto para asegurarnos que no dejamos ningún recurso consumiendo crédito**.
