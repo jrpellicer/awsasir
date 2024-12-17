@@ -8,17 +8,20 @@ nav_order: 1
 
 ## Objetivo del Proyecto
 
-En esta práctica vamos a crear en la nube una máquina virtual de Windows 11 y nos conectaremos a ella por RDP. Conoceremos los recursos de Azure asociados a la creación de esa máquina virtual:
-- La propia máquina virtual.
-- El disco duro de la máquina virtual.
-- La tarjeta de red de la máquina virtual.
-- La red virtual a la que está conectada la máquina.
+En esta práctica vamos a crear en la nube una máquina virtual de Windows Server 2025 y nos conectaremos a ella por RDP. Conoceremos los recursos de AWS asociados a la creación de esa máquina virtual:
+
+- La instancia EC2 (la propia máquina virtual).
+- El volumen EBS asociado (el disco duro de la máquina virtual).
+- La red (VPC) y la subred virtual a la que está conectada la máquina.
+- Un Internet Gateway (puerta de enlace) para salir a Internet desde la red virtual.
 - Una dirección IP pública para conectarnos desde el exterior.
+- Una dirección IP Elástica (la IP pública, pero estática, para que no cambie al reiniciar la máquina).
 - Un grupo de seguridad para controlar los accesos.
 
-## Esquema en Azure
 
-<img src="./images/practica_01_01.png" width="700">
+## Esquema en AWS
+
+<img src="./images/EC2.drawio.png">
 
 
 ## Práctica a Realizar
