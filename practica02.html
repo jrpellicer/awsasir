@@ -1,0 +1,674 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="practica01.html">
+      
+      
+        <link rel="next" href="practica03.html">
+      
+      
+      <link rel="icon" href="images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
+    
+    
+      
+        <title>Almacenamiento - Prácticas en AWS para ASIR</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.6f8fc17f.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="css/extra.css">
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#almacenamiento-en-azure" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="index.html" title="Prácticas en AWS para ASIR" class="md-header__button md-logo" aria-label="Prácticas en AWS para ASIR" data-md-component="logo">
+      
+  <img src="images/logoIABD3.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Prácticas en AWS para ASIR
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Almacenamiento
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="light-blue"  aria-label="Cambiar a modo noche"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo noche" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="light-blue"  aria-label="Cambiar a modo día"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo día" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="Prácticas en AWS para ASIR" class="md-nav__button md-logo" aria-label="Prácticas en AWS para ASIR" data-md-component="logo">
+      
+  <img src="images/logoIABD3.png" alt="logo">
+
+    </a>
+    Prácticas en AWS para ASIR
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Inicio
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="practica01.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Creación de MV
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Almacenamiento
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="practica02.html" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Almacenamiento
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivo-del-proyecto" class="md-nav__link">
+    <span class="md-ellipsis">
+      Objetivo del Proyecto
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practica-a-realizar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Práctica a Realizar
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="practica03.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Redes Virtuales
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="practica04.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dominio Windows Server
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="practica05.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dominio Híbrido
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="practica06.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Bases de Datos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivo-del-proyecto" class="md-nav__link">
+    <span class="md-ellipsis">
+      Objetivo del Proyecto
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practica-a-realizar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Práctica a Realizar
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="almacenamiento-en-azure">Almacenamiento en Azure</h1>
+<h2 id="objetivo-del-proyecto">Objetivo del Proyecto</h2>
+<p>En esta práctica conoceremos una de las múltiples soluciones de almacenamiento que nos ofrece Azure, en concreto <strong>Azure Files</strong>. </p>
+<p>Azure ofrece muchas soluciones y servicios de almacenamiento. Las 5 principales soluciones relacionadas con el almacenamiento se agrupan bajo el nombre de <strong>Azure Storage</strong>, y comprende los siguientes servicios: </p>
+<ul>
+<li>
+<p><strong>Azure Blobs</strong>: Almacén de objetos en la nube (como DropBox o OneDrive) y estos objetos son accesibles desde cualquier parte, incluso como direcciones url. </p>
+</li>
+<li>
+<p><strong>Azure Files</strong>: recursos compartidos de archivos totalmente administrados en la nube a los que se puede acceder mediante los protocolos SMB o NFS, desde clientes Windows, Linux o MacOS, tanto virtuales como locales. </p>
+</li>
+<li>
+<p><strong>Colas de Azure</strong>: un almacén para mensajería entre componentes de aplicación. </p>
+</li>
+<li>
+<p><strong>Azure Disks</strong>: volúmenes de almacenamiento en el nivel de bloque para máquinas virtuales de Azure, es decir discos virtuales para su uso en máquinas virtuales Azure. </p>
+</li>
+<li>
+<p><strong>Tablas de Azure</strong>: Opción tabla NoSQL para datos estructurados y no relacionales. </p>
+</li>
+</ul>
+<p><img src="images/practica_02_01.png" width="500"></p>
+<p>Todos los servicios de almacenamiento necesitan estar asociados a una cuenta de almacenamiento (<strong>Azure Storage Account</strong>). Podemos tener una o varias de estas cuentas de almacenamiento en varios grupos de recursos.  </p>
+<p>Nosotros en esta práctica vamos a centrarnos en el servicio <strong>Azure Files</strong>. Con este servicio vamos a poder crear en la nube un recurso de almacenamiento compartido al que accederemos desde nuestra máquina local mediante los protocolos SMB (si lo hacemos desde una máquina Windows) o NFS (desde un Linux). Haremos un punto de montaje persistente para tener siempre acceso a esa unidad de red. </p>
+<p>El funcionamiento será similar a si tuviéramos los datos almacenados en un NAS, pero en este caso accesible desde cualquier punto. </p>
+<h2 id="practica-a-realizar">Práctica a Realizar</h2>
+<ol>
+<li>Empezamos creando un grupo de recursos con el nombre que queramos, por ejemplo <em>almacenamiento</em>.</li>
+</ol>
+<hr />
+<p>{:style="counter-reset:none"}</p>
+<ol>
+<li>Creamos una <strong>Cuenta de Almacenamiento</strong> en el grupo de recursos almacenamiento que acabamos de crear:</li>
+<li>Nombra a la cuenta de almacenamiento como quieras, por ejemplo, <em>asirstorage</em></li>
+<li>Por motivos de coste, selecciona la opción de Rendimiento Estándar y la Redundancia Local (LRS) </li>
+</ol>
+<hr />
+<p>{:style="counter-reset:none"}</p>
+<ol>
+<li>Una vez creada la cuenta de almacenamiento, vamos a crear el recurso de <strong>Azure Files</strong> propiamente dicho. Para ello, accedemos a la Cuenta de Almacenamiento, y en el menú de opciones de la izquierda seleccionamos <strong>Recursos Compartidos de Archivos</strong>. </li>
+</ol>
+<hr />
+<p>{:style="counter-reset:none"}</p>
+<ol>
+<li>Pulsamos sobre la opción <strong>Nuevo Recurso Compartido de Archivos</strong>: </li>
+<li>Nombra el recurso como quieras, por ejemplo, <em>asir-azure</em>. </li>
+<li>Selecciona un Nivel. </li>
+<li>En la opción de Backup, <strong>Deshabilita la copia de seguridad</strong>. </li>
+</ol>
+<p>{: .note } 
+Deshabilitar la copia de seguridad no es aconsejable, pero nos facilitará la eliminación del recurso cuando hayamos acabado con la práctica.</p>
+<hr />
+<p>{:style="counter-reset:none"}</p>
+<ol>
+<li>Accede al recurso recién creado <em>asir-azure</em>. Mediante la opción <strong>Examinar</strong>: </li>
+<li>Agrega un directorio. </li>
+<li>Carga un fichero en él. </li>
+</ol>
+<hr />
+<p>{:style="counter-reset:none"}</p>
+<ol>
+<li>En la <strong>Información General</strong> del recurso hay una opción que pone <strong>Conectar</strong>. En ella nos aparecen scripts para Windows, Linux y Mac. Copia el script para el sistema operativo de la máquina que vayas a utilizar para probarlo (por ejemplo, un Windows). </li>
+</ol>
+<hr />
+<p>{:style="counter-reset:none"}</p>
+<ol>
+<li>En una máquina externa crea un script con el contenido copiado. </li>
+<li>Si es una máquina Windows el archivo debe acabar con la extensión <em>.ps1</em>, y si es Linux nómbralo con la extensión <em>.sh</em> </li>
+<li>Para ejecutar el script en Windows antes tienes que habilitar previamente la ejecución de scripts como administrador <code>Set-ExecutionPolicy Unrestricted</code></li>
+<li>Para ejecutar el script en Linux debes asignar permisos de ejcución (<em>a+x</em>). </li>
+</ol>
+<hr />
+<p>{:style="counter-reset:none"}</p>
+<ol>
+<li>
+<p>Es posible que tras la ejecución en Windows nos diga que ha funcionado correctamente, pero al visualizar las unidades mediante <em>Get-PSDrive</em> no nos aparezca la recién creada. Copia la línea del script y vuélvela a ejecutar (con tu usuario): </p>
+<p><code>New-PSDrive -Name Z -PSProvider FileSystem -Root "\\asirstorage.file.core.windows.net\asir-azure" -Persist</code></p>
+</li>
+</ol>
+<hr />
+<p>{:style="counter-reset:none"}</p>
+<ol>
+<li>Accede a Este Equipo y comprueba que tenemos la nueva Ubicación de Red. </li>
+</ol>
+<p><img src="images/practica_02_02.png" width="700"></p>
+<p>{: .warning } 
+Cada vez que iniciemos la máquina, la conexión de red estará disponible. Para desconectarla pulsa con el botón derecho sobre la Unidad y selecciona <em>Desconectar</em>. </p>
+<hr />
+<p>{:style="counter-reset:none"}</p>
+<ol>
+<li><strong>Elimina el grupo de recursos creado en el primer punto para asegurarnos que no dejamos ningún recurso consumiendo crédito.</strong></li>
+</ol>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Pie" >
+        
+          
+          <a href="practica01.html" class="md-footer__link md-footer__link--prev" aria-label="Anterior: Creación de MV">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Anterior
+              </span>
+              <div class="md-ellipsis">
+                Creación de MV
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="practica03.html" class="md-footer__link md-footer__link--next" aria-label="Siguiente: Redes Virtuales">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Siguiente
+              </span>
+              <div class="md-ellipsis">
+                Redes Virtuales
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": ".", "features": ["header.autohide", "navigation.top", "navigation.tracking", "navigation.footer", "navigation.indexes", "content.code.annotate", "announce.dismiss", "toc.follow", "content.code.copy"], "search": "assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}}</script>
+    
+    
+      <script src="assets/javascripts/bundle.88dd0f4e.min.js"></script>
+      
+    
+  </body>
+</html>
