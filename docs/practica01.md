@@ -26,6 +26,8 @@ En esta práctica vamos a crear en la nube una máquina virtual de Windows Serve
 
 ## Práctica a Realizar
 
+### Acceso a EC2
+
 1.- Vamos a crear directamente una máquina en la red virtual (VPC) creada por defecto. Para ello accedemos directamente al servicio de máquinas virtuales de AWS llamado EC2 (Amazon Elastic Compute Cloud).
 
 - Buscamos el servicio **EC2** en la consola.
@@ -35,8 +37,10 @@ En esta práctica vamos a crear en la nube una máquina virtual de Windows Serve
     
     Tenemos una red creada de manera predeterminada con una dirección de red **172.31.0.0/16**, la cual tiene 6 subredes ubicadas en 6 zonas de disponibilidad distintas de la región en la que se lanza el laboratorio (Norte de Virginia: *us-east-1*). Vamos a crear la máquina en esta red por defecto.
 
+<br>
 ___
 
+### Lanzamiento de la instancia
 
 2.- Para lanzar la instancia EC2 es necesario asignarle una serie de parámetros obligatorios y configurar otros opcionales.
 
@@ -53,8 +57,10 @@ ___
 - Dejamos las opciones de almacenamiento que nos propone por defecto: 30GiB en un disco *SSD de uso general*.
 - Lanzamos la instancia.
 
+<br>
 ___
 
+### Comprobación de los recursos creados
 
 Tras unos minutos se nos crea la instancia, y con ella los siguientes recursos que podemos comprobar.
 
@@ -69,3 +75,68 @@ Comprueba pinchando sobre el enlace correspondiente que se ha creado:
 - Un **volumen EBS** (disco duro).
 - 2 **Grupos de seguridad** (el que venía por defecto y el que hemos creado llamado *acceso-remoto*).
 
+<br>
+
+4.- Accede en la consola al panel de VPC.
+
+<img src="./images/creacion_MV_02.jpg">
+
+Comprueba que nos aparece una VPC que ya venía creada por defecto. Accede a ella y verás las subredes y recursos asociados:
+- 6 **Subredes** en 6 AZs
+- 1 **Tabla de enrutamiento** utilizada por todas las subredes.
+- 1 Conexión de red a Internet: **Internet Gateway**
+
+<img src="./images/creacion_MV_03.jpg">
+
+<br>
+___
+
+
+### Acceso por RDP
+
+Vamos a iniciar una sesión de escritorio remoto en la máquina creada. Al crear la máquina no nos ha solicitado nombre de usuario y contraseña. Por seguridad, nos crea una contraseña compleja que solamente podemos ver utilizando el par de claves pública y privada que hemos seleccionado al crear la máquina.
+
+El primer paso para poder ver la contraseña es descargarnos el fichero de la clave o copiar el contenido. 
+
+5.- Accede a la **consola de lanzamiento del laboratorio** y en *Detalles* pulsa sobre una de las opciones de descarga o visualización de la clave privada. Descarga, por ejemplo, el fichero PEM.
+
+<img src="./images/creacion_MV_04.jpg">
+
+6.- En la **consola de AWS** accede al panel de la instancia EC2 que acabamos de lanzar y pulsamos sobre *Conectar*. En la pestaña de *Cliente RDP* descargam el archivo RDP y pulsam sobre *Obtener Contraseña*. Para descifrarla te pide la clave privada que acabas de descargar.
+
+Una vez descifrada, ya podemos abrir el fichero RDP descargado e introducir el usuario (*Administrator*) y la contraseña para iniciar sesión.
+
+
+
+<br>
+___
+
+### Acceso por SSH
+
+Vamos a iniciar ahora una sesión al servidor W2025 desde nuestra máquina local, pero esta vez utilizando el protocolo SSH.
+
+7.- En primer lugar, con la sesión de Escritorio Remoto abierta en la máquina Windows Server realiza las siguientes acciones: 
+- Habilita en el panel del **Administración del servidor** el **Acceso Remoto por SSH**.
+- En el firewall de Windows (**Windows defender firewall with advanced security** que se encuentra en las **Herramientas Administrativas**) añade una regla de entrada para permitir conexiones del puerto 22 desde cualquier red.
+
+<br>
+
+8.- Ahora, en la **consola de AWS**, configura el **grupo de seguridad** que creamos en el momento de lanzar la instancia (*acceso-remoto*) y edita las *Reglas de entrada* para añadir el protocolo SSH (puerto TCP 22) desde cualquier dirección IPv4.
+
+<br>
+
+9.- Desde el panel de EC2, vemos los detalles de nuestra instancia en ejecución y comprobamos la IP Pública asignada a la instancia.
+
+<br>
+
+Ya podemos desde un terminal lanzar un ssh a la dirección pública asociada a nuestra instancia EC2:
+
+    ssh administrator@54.242.76.151
+
+!!! note "Nota"
+
+    Nos hemos conectado por contraseña, lo cual es una práctica poco recomendada en AWS. Veremos que en las instancias con Linux lo haremos siempre mediante un par de claves.
+
+___
+
+### Asignación IP Elástica
