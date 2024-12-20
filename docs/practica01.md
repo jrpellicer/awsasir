@@ -140,3 +140,23 @@ Ya podemos desde un terminal lanzar un ssh a la dirección pública asociada a n
 ___
 
 ### Asignación IP Elástica
+
+Esa dirección IP pública a la que nos hemos conectado no es fija, de modo que cada vez que se reinicie la instancia (o apaguemos el laboratorio) la dirección puede cambiar. Podemos asignar una IP fija (con un incremento del costo) a nuestra máquina para evitar que esto suceda. Para ello utilizamos las **IP Elásticas** de AWS.
+
+10.- En el panel de recursos de EC2, accede a **Direcciones IP elásticas**:
+- **Asigna** (crea) una nueva dirección elástica.
+- Una vez creada, hay que **asociarla a un recurso**. En nuestro caso a la instancia EC2. En Acciones selecciona la opción Dirección IP elástica asociada y elige el id de la instancia *W2025*.
+- Esta acción provocará un cambio inmediato de la dirección IP Pública que teníamos por la nueva IP elástica, obligando a rehacer las conexiones.
+
+<br>
+___
+
+### Liberación de recursos
+
+11.- Una vez finalizada la práctica hay que eliminar los recursos creados para que no nos consuman crédito:
+
+- Comenzamos liberando la IP elástica. Para ello **desasociamos la IP elástica** y a continuación seleccionamos la opción **Publicar dirección IP elástica**. (Publicar = hacer pública = disponible).
+- Terminamos la instancia. En el panel de EC2, con la instancia seleccionada, pulsamos sobre la Acción **Terminar (eliminar) instancia**. Nos informa que el volumen EBS asociado también se eliminará.
+- Por último, eliminamos el grupo de seguridad *acceso-remoto*.
+
+Recuerda finalizar el laboratorio.
