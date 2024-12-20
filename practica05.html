@@ -1,0 +1,753 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="practica04.html">
+      
+      
+        <link rel="next" href="practica06.html">
+      
+      
+      <link rel="icon" href="images/cloud-computing.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
+    
+    
+      
+        <title>Dominio Híbrido - Prácticas en AWS para ASIR</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.6f8fc17f.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="css/extra.css">
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#dominio-con-cliente-local-y-servidor-en-azure" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="index.html" title="Prácticas en AWS para ASIR" class="md-header__button md-logo" aria-label="Prácticas en AWS para ASIR" data-md-component="logo">
+      
+  <img src="images/cloud-computing.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Prácticas en AWS para ASIR
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Dominio Híbrido
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="light-blue"  aria-label="Cambiar a modo noche"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo noche" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="light-blue"  aria-label="Cambiar a modo día"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo día" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="Prácticas en AWS para ASIR" class="md-nav__button md-logo" aria-label="Prácticas en AWS para ASIR" data-md-component="logo">
+      
+  <img src="images/cloud-computing.png" alt="logo">
+
+    </a>
+    Prácticas en AWS para ASIR
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Inicio
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="practica01.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Creación de MV
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="practica02.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Almacenamiento
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="practica03.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Redes Virtuales
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="practica04.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dominio Windows Server
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Dominio Híbrido
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="practica05.html" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Dominio Híbrido
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivo-del-proyecto" class="md-nav__link">
+    <span class="md-ellipsis">
+      Objetivo del Proyecto
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#esquema-en-azure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Esquema en Azure
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practica-a-realizar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Práctica a Realizar
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="practica06.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Bases de Datos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivo-del-proyecto" class="md-nav__link">
+    <span class="md-ellipsis">
+      Objetivo del Proyecto
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#esquema-en-azure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Esquema en Azure
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practica-a-realizar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Práctica a Realizar
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="dominio-con-cliente-local-y-servidor-en-azure">Dominio con Cliente Local y Servidor en Azure</h1>
+<p>{: .no_toc }</p>
+<details open markdown="block">
+  <summary>
+    Tabla de contenidos
+  </summary>
+  {: .text-delta }
+- TOC
+{:toc}
+</details>
+
+<h2 id="objetivo-del-proyecto">Objetivo del Proyecto</h2>
+<p>En esta práctica vamos a crear en la nube un controlador de dominio en un sistema operativo Windows Server 2019, crearemos un dominio y le conectaremos un cliente Windows local mediante una conexión VPN.</p>
+<p>En este caso emularemos una solución híbrida, en la cual solo el servidor Windows Server 2019 estará hospedado en la nube, y el equipo cliente será una máquina local (en nuestro caso una máquina virtual de VirtualBox).</p>
+<h2 id="esquema-en-azure">Esquema en Azure</h2>
+<p><img src="images/practica_05_01.png" width="700"></p>
+<h2 id="practica-a-realizar">Práctica a Realizar</h2>
+<p>{: .warning }
+<strong>Antes de empezar</strong>: He tenido problemas al generar la <em>VPN Gateway</em> en la Región <em>West Europe</em>. Aconsejo seleccionar como región para crear el grupo de recursos la situada en <strong>East US</strong>.</p>
+<ol>
+<li>Empezamos creando un grupo de recursos con el nombre que queramos, por ejemplo <em>naranjo-azure</em>.</li>
+</ol>
+<hr />
+<p>{:style="counter-reset:none"}</p>
+<ol>
+<li>Creamos la máquina <strong>Windows Server 2019</strong>:</li>
+<li>El tamaño de la máquina será el mínimo para poder correr Windows Server 2019 (4GiB RAM).</li>
+<li>No será necesaria redundancia en las zonas de disponibilidad. </li>
+<li>El nombre del equipo será <em>Pascal</em>.</li>
+<li>Por motivos de coste, el disco duro del sistema será de tipo HDD Estándar.</li>
+<li>En el apartado Redes crea una red virtual nueva llamada <em>red-naranjo</em> con un espacio de direcciones 10.1.0.0/16 y una subred llamada <em>default</em> 10.1.0.0/24.</li>
+<li>Crea una nueva <strong>IP Pública</strong>, con nombre <em>Pascal-IP</em> (el que aparece por defecto).</li>
+<li>Hemos de asegurarnos al crear la máquina que habilitamos el puerto para RDP (3389). Eso nos creará un <strong>Grupo de Seguridad</strong> (nsg) con el puerto 3389 abierto desde todas las direcciones.</li>
+</ol>
+<hr />
+<p>{:style="counter-reset:none"}</p>
+<ol>
+<li>Si todo ha ido bien se nos han debido crear los siguientes <strong>6 recursos</strong> en nuestro Grupo de Recursos <em>naranjo-azure</em>:</li>
+<li>Una red virtual (<em>red-naranjo</em>).</li>
+<li>Una IP Pública (<em>Pascal-ip</em>).</li>
+<li>Una máquina virtual (<em>Pascal</em>).</li>
+<li>Un disco duro (el disco de sistema de <em>Pascal</em>).</li>
+<li>Un grupo de seguridad (<em>Pascal-nsg</em>).</li>
+<li>Una tarjeta de red (la de la máquina <em>Pascal</em>).</li>
+</ol>
+<hr />
+<p>{:style="counter-reset:none"}</p>
+<ol>
+<li>Conéctate a la máquina Pascal mediante conexión de escritorio remoto desde tu máquina host.</li>
+</ol>
+<hr />
+<p>{:style="counter-reset:none"}</p>
+<ol>
+<li>Comprueba que la IP interna de la máquina está en el rango de nuestra subred <em>default</em> (seguramente la 10.1.0.4)</li>
+</ol>
+<hr />
+<p>{:style="counter-reset:none"}</p>
+<ol>
+<li>Instala Active Directory y crea un dominio llamado <em>naranjo.asir</em></li>
+</ol>
+<hr />
+<p>{:style="counter-reset:none"}</p>
+<ol>
+<li>Sabemos que al instalar Active Directory en el servidor <em>Pascal</em>, se ha instalado también el servidor DNS en ese equipo. Vamos a configurar la red virtual <em>red-naranjo</em> para indicarle que el servidor DNS de nuestra red es la máquina <em>Pascal</em>. Esto nos hará falta para la configiración de red del cliente:</li>
+<li>Para ello accede al recurso correspondiente a la red <em>red-naranjo</em> y en la lista de opciones de la izquierda selecciona <strong>Servidores DNS</strong>.</li>
+<li>Selecciona la opción <strong>Personalizado</strong></li>
+<li>Añade la dirección IP local de <em>Pascal</em> (10.1.0.4) y el servidor DNS de Google (8.8.8.8)</li>
+</ol>
+<hr />
+<p>{:style="counter-reset:none"}</p>
+<ol>
+<li>Mientras se instala el dominio, en el portal de Azure vamos a crear la VPN para conectarnos. Para ello añade un recurso del tipo <strong>Puerta de enlace de red virtual</strong> (<em>VPN Gateway</em>) con las siguientes características:</li>
+<li>Ponle el nombre que quieras, por ejemplo <em>vpn-naranjo</em></li>
+<li>Selecciona la <strong>Región de Azure</strong> donde tengas los demás recursos.</li>
+<li>En <strong>Tipo de puerta de enlace</strong> selecciona <em>VPN</em></li>
+<li>En <strong>SKU</strong> y <strong>Generación</strong> seleccionamos respectivamente <em>VpnGw1</em> y <em>Generation 1</em> que nos entran en la capa gratuita de Azure.</li>
+<li>En la <strong>Red virtual</strong> selecciona la <em>red-naranjo</em>.</li>
+<li>En el <strong>Intervalo de direcciones</strong> ponemos la siguiente: <em>10.1.255.0/27</em> (Este Intervalo abarca únicamente 32 direcciones, desde la 10.1.255.0 hasta la 10.1.255.31 y se utiliza para direccionar elementos necesarios como la propia Puerta de Enlace y Túneles VPN. Recuerda que la máquina Windows Server está en otra subred, la <em>10.1.0.0/24</em>).</li>
+<li>Asigna una nueva <strong>IP Pública</strong> con el nombre que quieras, por ejemplo <em>VPN-ip</em></li>
+<li>Marcamos como <em>Deshabilitado</em> la opción <strong>Habilitar el modo Activo</strong></li>
+</ol>
+<p>{: .warning }
+El proceso de creación de la VPN puede tardar bastantes minutos. Ve configurando en VirtualBox la máquina cliente que se va a conectar al dominio.</p>
+<hr />
+<p>{:style="counter-reset:none"}</p>
+<ol>
+<li>En la máquina Windows cliente que conectaremos al dominio vamos a crear dos certificados:</li>
+<li><strong>Un certificado raíz</strong>: será el que subamos a Azure para validar las conexiones desde los clientes.</li>
+<li><strong>Un certificado cliente</strong>: será generado a partir del certificado raíz y será necesario en el equipo cliente para validar la conexión.</li>
+</ol>
+<p>Para la creación del cerificado raíz, inicia una sesión en PowerShell con provilegios de Administrador y ejecuta el siguiente comando:</p>
+<p><code>$cert = New-SelfSignedCertificate -Type 'Custom' -Subject 'CN=P2SRootCert' -KeySpec 'Signature' -KeyExportPolicy 'Exportable' -KeyUsage 'CertSign' -KeyUsageProperty 'Sign' -KeyLength 2048 -HashAlgorithm 'sha256' -NotAfter (Get-Date).AddMonths(24) -CertStoreLocation 'Cert:\CurrentUser\My'</code></p>
+<p>Para la creación del certificado cliente, sin cerrar la sesión de PowerShell, teclea:</p>
+<p><code>New-SelfSignedCertificate -Type 'Custom' -Subject 'CN=P2SChildCert' -DnsName 'P2SChildCert' -KeySpec 'Signature' -KeyExportPolicy 'Exportable' -KeyLength 2048 -HashAlgorithm 'sha256' -NotAfter (Get-Date).AddMonths(18) -CertStoreLocation 'Cert:\CurrentUser\My' -Signer $cert -TextExtension @('2.5.29.37={text}1.3.6.1.5.5.7.3.2')</code></p>
+<p>{: .important }
+Comprueba que se han creado los 2 certificados accediendo a la <strong>Consola de Gestión de Certificados</strong>. Para ello pulsa las teclas <em>Windows +R</em> y ejecuta el comando <code>certmgr.msc</code>. En el contenedor de <em>Certificdos del Usuario Actual--&gt; Personal --&gt; Certificados</em> deben aparecer los 2 certificados que acabamos de crear: <em>P2SRootCert</em> y <em>P2SChildCert</em></p>
+<hr />
+<p>{:style="counter-reset:none"}</p>
+<ol>
+<li>Necesitamos subir a Azure el certificado raíz que acabamos de crear. Para ello es necesario exportar el certificado.</li>
+<li>En la <strong>Consola de Gestión de Certificados</strong> que acabas de abrir, sitúate sobre el certificado raíz (<em>P2SRootCert</em>) y con el botón derecho pulsa sobre <strong>Todas las Acciones --&gt; Exportar</strong></li>
+<li>En el asistente selecciona la opción de <strong>No exportar Clave Privada</strong></li>
+<li>Selecciona el formato <strong>X.509 codificado base 64 (.CER)</strong></li>
+<li>Selecciona una ubicación (por ejemplo el Escritorio) y un nombre de archivo.</li>
+<li>Ve a la ubicación del archivo que acabas de exportar y ábrelo con el Bloc de Notas.</li>
+<li>Copia al portapapeles (si estás en VirtualBox asegúrate de tener habilitada la opción y haber instalado las Guest Additions) las líneas que hay entre medio de -----BEGIN CERTIFICATE----- y -----END CERTIFICATE-----</li>
+</ol>
+<hr />
+<p>{:style="counter-reset:none"}</p>
+<ol>
+<li>Una vez se haya acabado de implementar la <strong>Puerta de enlace de red virtual</strong> hay que configurar el acceso. Para ello entra en el recurso y en la lista de opciones que aparece a la izquierda selecciona <strong>Configuración de punto a sitio</strong></li>
+<li>En <strong>Grupo de direcciones</strong> selecciona el rango 192.168.15.0/24. Este será el rango en el que la VPN asignará una dirección IP a la máquina cliente.</li>
+<li>En <strong>Tipo de Túnel</strong> selecciona <em>IKEv2 y SSTP (SSL)</em>. Son los necesarios para un cliente Windows.</li>
+<li>En <strong>Tipo de Autentificación</strong> selecciona <em>Certificado de Azure</em></li>
+<li>En los <strong>Certificados raíz</strong> pon un nombre que quieras (por ejemplo <em>cert_root</em>) y en los datos del certificado público pega la clave pública que habías copiado al portapapeles en el paso anterior.</li>
+<li>Por último, pulsa en <strong>Guardar</strong></li>
+</ol>
+<p>{: .note }
+El proceso de Guardar le puede costar unos minutos</p>
+<hr />
+<p>{:style="counter-reset:none"}</p>
+<ol>
+<li>Una vez finalizado el proceso de guardar hay que pulsar sobre la opción <strong>Descargar el cliente VPN</strong>. Este fichero lo debemos copiar a la máquina cliente Windows 10 que vamos a conectar al dominio y nos servirá para configurar de manera automática la VPN en el cliente. Podríamos hacerlo sin este asistente, pero habría que configurar todos los datos de manera manual.</li>
+</ol>
+<hr />
+<p>{:style="counter-reset:none"}</p>
+<ol>
+<li>En la máquina cliente Windows 10 extraemos el fichero zip descargado, y en la carpeta <strong>WindowsAmd64</strong> ejecutamos el fichero <em>VpnClientSetupAmd64.exe</em></li>
+</ol>
+<hr />
+<p>{:style="counter-reset:none"}</p>
+<ol>
+<li>Se ha debido crear la conexión VPN. Accedemos al menú <strong>Configuración</strong> de Windows, y en la opción <strong>Redes e Internet</strong> pulsamos sobre <strong>VPN</strong>. Nos debe aparecer la recién creada, y pulsamos sobre <strong>Conectar.</strong></li>
+</ol>
+<p>{: .note }
+Podemos comprobar que todo ha ido bien abriendo una consola de powershell y ejecutando el comando <code>ipconfig /all</code> y si todo ha funcionado nos debe mostar un nuevo adaptador de red con una IP dentro del rango <em>192.168.15.0/24</em> y con el DNS <em>10.1.0.4</em>. También podemos ejecutar <code>ping pascal.naranjo.asir</code> y el servidor nos debe contestar.</p>
+<hr />
+<p>{:style="counter-reset:none"}</p>
+<ol>
+<li>Ya estamos en condiciones de unir el equipo al dominio. Simplemente ve a las propiedades del Equipo y cambia el grupo de trabajo por el dominio <em>naranjo.asir</em>. No hace falta configurar la red (introducir la IP del servidor DNS) pues ya se ha hecho automáticamente con la creación de la VPN.</li>
+</ol>
+<hr />
+<p>{:style="counter-reset:none"}</p>
+<ol>
+<li>Accede al servidor y en la consola <strong>Usuario y equipos de Active Directory</strong> comprueba que en <em>computers</em> aparece como miembro del dominio el equipo que acabamos de unir.</li>
+</ol>
+<p>{: .important }
+El siguiente paso natural sería iniciar sesión en el cliente con un usuario del dominio. No lo vamos a hacer, la práctica termina aquí, pues para poder iniciar sesión en el dominio hay que conectar cada vez la VPN, y es un proceso más largo.</p>
+<hr />
+<p>{:style="counter-reset:none"}</p>
+<ol>
+<li>Apaga las máquinas y <strong>elimina el grupo de recursos creado en el primer punto para asegurarnos que no dejamos ningún recurso consumiendo crédito</strong>.</li>
+</ol>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Pie" >
+        
+          
+          <a href="practica04.html" class="md-footer__link md-footer__link--prev" aria-label="Anterior: Dominio Windows Server">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Anterior
+              </span>
+              <div class="md-ellipsis">
+                Dominio Windows Server
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="practica06.html" class="md-footer__link md-footer__link--next" aria-label="Siguiente: Bases de Datos">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Siguiente
+              </span>
+              <div class="md-ellipsis">
+                Bases de Datos
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": ".", "features": ["header.autohide", "navigation.top", "navigation.tracking", "navigation.footer", "navigation.indexes", "content.code.annotate", "announce.dismiss", "toc.follow", "content.code.copy"], "search": "assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}}</script>
+    
+    
+      <script src="assets/javascripts/bundle.88dd0f4e.min.js"></script>
+      
+    
+  </body>
+</html>
