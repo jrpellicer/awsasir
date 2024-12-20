@@ -115,7 +115,8 @@ ___
 
 Vamos a iniciar ahora una sesión al servidor W2025 desde nuestra máquina local, pero esta vez utilizando el protocolo SSH.
 
-7.- En primer lugar, con la sesión de Escritorio Remoto abierta en la máquina Windows Server realiza las siguientes acciones: 
+7.- En primer lugar, con la sesión de Escritorio Remoto abierta en la máquina Windows Server realiza las siguientes acciones:
+
 - Habilita en el panel del **Administración del servidor** el **Acceso Remoto por SSH**.
 - En el firewall de Windows (**Windows defender firewall with advanced security** que se encuentra en las **Herramientas Administrativas**) añade una regla de entrada para permitir conexiones del puerto 22 desde cualquier red.
 

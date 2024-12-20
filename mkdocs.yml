@@ -4,7 +4,7 @@ use_directory_urls: false
 theme:
     language: es
     name: "material"
-    favicon: "images/favicon.png"
+    favicon: "images/cloud-computing.png"
     palette:
         - scheme: default
           primary: indigo
@@ -21,7 +21,7 @@ theme:
     font:
         text: Roboto
         code: Roboto Mono
-    logo: "images/logoIABD3.png"
+    logo: "images/cloud-computing.png"
     features:
         - header.autohide
         - navigation.top
