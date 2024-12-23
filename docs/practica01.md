@@ -82,6 +82,7 @@ Comprueba pinchando sobre el enlace correspondiente que se ha creado:
 <img src="./images/creacion_MV_02.jpg">
 
 Comprueba que nos aparece una VPC que ya venía creada por defecto. Accede a ella y verás las subredes y recursos asociados:
+
 - 6 **Subredes** en 6 AZs
 - 1 **Tabla de enrutamiento** utilizada por todas las subredes.
 - 1 Conexión de red a Internet: **Internet Gateway**
@@ -102,10 +103,9 @@ El primer paso para poder ver la contraseña es descargarnos el fichero de la cl
 
 <img src="./images/creacion_MV_04.jpg">
 
-6.- En la **consola de AWS** accede al panel de la instancia EC2 que acabamos de lanzar y pulsamos sobre *Conectar*. En la pestaña de *Cliente RDP* descargam el archivo RDP y pulsam sobre *Obtener Contraseña*. Para descifrarla te pide la clave privada que acabas de descargar.
+6.- En la **consola de AWS** accede al panel de la instancia EC2 que acabamos de lanzar y pulsa sobre *Conectar*. En la pestaña de *Cliente RDP* descarga el archivo RDP y pulsa sobre *Obtener Contraseña*. Para descifrarla te pide la clave privada que acabas de descargar.
 
 Una vez descifrada, ya podemos abrir el fichero RDP descargado e introducir el usuario (*Administrator*) y la contraseña para iniciar sesión.
-
 
 
 <br>
@@ -113,7 +113,7 @@ ___
 
 ### Acceso por SSH
 
-Vamos a iniciar ahora una sesión al servidor W2025 desde nuestra máquina local, pero esta vez utilizando el protocolo SSH.
+Vamos a iniciar ahora una sesión al servidor *W2025* desde nuestra máquina local, pero esta vez utilizando el protocolo SSH.
 
 7.- En primer lugar, con la sesión de Escritorio Remoto abierta en la máquina Windows Server realiza las siguientes acciones:
 
@@ -145,6 +145,7 @@ ___
 Esa dirección IP pública a la que nos hemos conectado no es fija, de modo que cada vez que se reinicie la instancia (o apaguemos el laboratorio) la dirección puede cambiar. Podemos asignar una IP fija (con un incremento del costo) a nuestra máquina para evitar que esto suceda. Para ello utilizamos las **IP Elásticas** de AWS.
 
 10.- En el panel de recursos de EC2, accede a **Direcciones IP elásticas**:
+
 - **Asigna** (crea) una nueva dirección elástica.
 - Una vez creada, hay que **asociarla a un recurso**. En nuestro caso a la instancia EC2. En Acciones selecciona la opción Dirección IP elástica asociada y elige el id de la instancia *W2025*.
 - Esta acción provocará un cambio inmediato de la dirección IP Pública que teníamos por la nueva IP elástica, obligando a rehacer las conexiones.
