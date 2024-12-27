@@ -5,18 +5,6 @@ nav_order: 3
 ---
 
 # Redes Virtuales
-{: .no_toc }
-
-<details open markdown="block">
-  <summary>
-    Tabla de contenidos
-  </summary>
-  {: .text-delta }
-- TOC
-{:toc}
-</details>
-
-
 
 ## Objetivo del Proyecto
 
@@ -31,166 +19,186 @@ En esta práctica vamos a crear de manera manual todos estos recursos para poder
 - La segunda máquina estará en la subred-privada y configuraremos su grupo de seguridad para que sea accesible únicamente desde la *subred-dmz*, sin acceso desde el exterior.
 
 
-## Esquema en Azure
+## Esquema en AWS
 
-<img src="images/practica_03_01.png" width="700">
+<img src="images/VPC.drawio.png">
 
 ## Práctica a Realizar
 
-1.  Empezamos creando un grupo de recursos con el nombre que queramos, por ejemplo *practica-3*.
+### Eliminación de la VPC por defecto
 
-{: .warning }
-Es importante que todos los recursos que creemos a continuación estén en la misma Región que nuestro grupo de recursos. Si se nos cambia automáticamente al crear un recurso, deberemos cambiarlo de forma manual. Esto puede pasar al elegir la imagen durante el proceso de creación de una máquina virtual.  
+Comenzamos por eliminar la VPC creada por defecto junto con todos sus recursos asociados.
 
-___
+1.- Accedemos al panel VPC y eliminamos la VPC. Nos informa que se eliminarán 8 recursos asociados:
 
-{: .warning }
-Para crear los recuros de red vamos a hacerlo desde el menú **Todos los Servicios** (apartado Redes). Si no lo hacemos desde esta opción de menú nos irá a la creación del recurso clásico y no será compatible con nuestras máquinas.
+- Las 6 subredes públicas
+- El Internet Gateway
+- El Grupo de Seguridad
 
-<img src="images/practica_03_02.png" width="700">
-___
-
-{:style="counter-reset:none"}
-
-
-2.	El primer paso será crear la red virtual que englobará toda la infraestructura. Accedemos al menú **Todos los Servicios** y en el apartado **Redes** seleccionamos **Redes Virtuales**:
-- Le ponemos un nombre, por ejemplo, *red-asir*.
-- En el espacio de direcciones le pondremos el rango de direcciones de la red. En nuestro caso 192.168.0.0/16
-- En subredes eliminamos la que nos propone por defecto y añadimos 2 nuevas: 
-  - Ponemos los datos de nuestra primera subred (*subred-dmz*, espacio de direcciones 192.168.1.0/24).
-  - Y de la segunda (*subred-privada* y el espacio de direcciones 192.168.2.0/24). 
-  - En este proceso podemos crear también los grupos de seguridad, pero lo dejamos para hacerlo desde fuera en el siguiente paso.
-
-<img src="images/practica_03_03.png" width="700">
-___
-
-{:style="counter-reset:none"}
-
-3.	Cuando hayamos finalizado la creación de la Red Virttual, vamos a crear los 2 **grupos de seguridad** para establecer los permisos en las conexiones hacia y desde las subredes. Lo podríamos haber hecho durante el proceso de creación de las subredes. Comenzamos con el primer grupo de seguridad que permitirá la conexión desde Internet hacia las máquinas que se encuentren en la *subred-dmz*. Creamos un recurso llamado **Grupo de Seguridad de Red** (se encuentra en el apartado **Redes**) y le llamamos *nsg-dmz*
+<img src="images/VPC_01.png">
 
 ___
 
-{:style="counter-reset:none"}
+### Creación de la nueva VPC
 
-4.	Una vez creado, accedemos al recurso y en el apartado **Reglas de Entrada** añadimos una nueva regla para permitir conexiones SSH desde el exterior:
-- Origen en cualquier dirección y permitirá la conexión por el puerto 22 (*servicio SSH*)
+2.- Procedemos a crear la VPC:
 
+-	Le decimos que queremos crear **la VPC y más**.
+-	Asignamos un nombre a la VPC, por ejemplo *practica02*
+-	Como dirección de red (Bloque de CIDR IPv4) dejamos la 10.0.0.0/16
+-	Seleccionamos una única zona de disponibilidad (AZ).
+-	Le decimos que nos cree una subred pública y otra privada.
+-	Personalizamos los bloques de direcciones de modo que las subredes tengan las siguientes direcciones:
+  -	Subred pública: 10.0.1.0/24
+  - Subred privada: 10.0.2.0/24
+-	Como deseamos que la subred privada tenga salida a Internet, creamos un **Gateway NAT** en 1 AZ (ojo, esto nos incrementará el coste considerablemente).
+-	No vamos a conectar ningún bucket de S3, por tanto no seleccionamos ningún *Gateway de S3* en el apartado de *Puntos de enlace de la VPC*.
+
+<img src="images/VPC_02.png">
+
+<br>
 ___
 
-{:style="counter-reset:none"}
+### Comprobación de los recursos creados
 
-5.	Creamos un nuevo **Grupo de Seguridad de Red** y le llamamos *nsg-privada*. Una vez creado, accedemos al recurso y en el apartado **Reglas de Entrada** visualizamos las reglas predeterminadas. Comprobamos que hay una (*AllowVnetInbound*) que admite cualquier conexión desde las redes virtuales de Azure. Puesto que esa es la única que necesitamos, ya no añadimos más reglas.
+3.- Comprobamos los recursos creados:
 
+- La VPC (*practica02-vpc*).
+- Las 2 subredes (*practica02-subnet-public1* y *practica02-subnet-private1*).
+- El Internet Gateway (*practica02-igw*).
+- Las 2 tablas de enrutamiento (una por cada subred: *practica02-rtb-public* y *practica02-rtb-private*).
+- Una tabla de enrutamiento por defecto.
+- Un Grupo de Seguridad por defecto.
+- El NAT Gateway (*practica02-nat-public1*) ubicado en la subred pública para dar salida a Internet en la subred privada.
+- Una IP Elástica asociada al NAT Gateway (*practica02-eip*).
+
+<br>
 ___
 
-{:style="counter-reset:none"}
+### Tablas de enrutamiento
 
-6.	Ya tenemos la red virtual con las 2 subredes y los grupos de seguridad. Vamos a crear un recurso de **IP Pública** que nos servirá para conectarnos a una de las máquinas virtuales desde el exterior. Creamos un recurso y desde el apartado **Redes** añadimos una **Dirección IP Pública** a nuestro grupo de recursos con los valores por defecto. Le asignamos un nombre, por ejemplo, *ip-ub01*, puesto que irá asociada a una máquina que llamaremos igual, para que nos sea más sencillo identificarla.
+Al crearse la VPC se han creado 3 tablas de enrutamiento: una por defecto y dos asociadas a las 2 subredes que hemos creado.
 
+**Tabla de entutamiento de la subred privada:**
+
+!!! info inline end "Uso Típico"
+
+    Subred privada que aloja recursos como:
+
+    - Bases de datos, servidores de aplicaciones o backend.
+    - Instancias que requieren acceso saliente a Internet (actualizaciones, APIs externas), pero que no deben recibir tráfico entrante directamente desde Internet.
+
+| Destino      | Objetivo       |
+| :----------: | :------------: |
+| 10.0.0.0 /16 | local          |
+| 0.0.0.0 /16  | nat-gateway    |
+
+Interpretación:
+
+- 10.0.0.0/16 -> local:
+        Permite que todos los recursos dentro de la VPC con dirección en el rango 10.0.0.0/16 se comuniquen entre sí sin salir de la red privada.
+- 0.0.0.0/0 -> NAT-Gateway:
+        Redirige el tráfico saliente destinado a Internet al NAT Gateway que se encuentra en la subred pública.
+        El NAT Gateway permite que las instancias en la subred privada se comuniquen con Internet sin ser directamente accesibles desde él.
+
+**Tabla de entutamiento de la subred pública:**
+
+!!! info inline end "Uso Típico"
+
+    Subred pública que aloja recursos como:
+
+    - Servidores web o aplicaciones que necesitan acceso desde Internet.
+    - Instancias EC2 con direcciones IP públicas.
+
+
+| Destino      | Objetivo        |
+| :----------: | :-------------: |
+| 10.0.0.0 /16 | local           |
+| 0.0.0.0 /16  | Internet-gateway|
+
+Interpretación:
+
+- 10.0.0.0/16 -> local:
+        Igual que en la tabla privada, permite la comunicación entre recursos dentro de la VPC sin salir de la red.
+- 0.0.0.0/0 -> Internet-Gateway:
+        Define que todo el tráfico destinado a Internet (es decir, fuera del rango 10.0.0.0/16) sea redirigido al Internet Gateway.
+        Este es el componente clave que convierte esta subred en una subred pública.
+
+<br>
 ___
 
-{:style="counter-reset:none"}
+### Creación de una instancia EC2 en la subred pública
 
-7.	Una vez creada toda nuestra infraestructura de red, nos queda crear las máquinas virtuales y colocarlas en cada subred, y asociarlas a los grupos de seguridad creados, así como asignar la IP Pública a la máquina que corresponda.
+Vamos a crear una máquina Ubuntu en la subred pública a la cual nos podremos conectar desde Internet.
 
-<img src="images/practica_03_04.png" width="700">
+4.- Accedemos al panel de EC2 y lanzamos una instancia.
+
+- La nombramos *ub01*
+- La imagen será una AMI de *Ubuntu 24.04 LTS*.
+- En tipo de instancia seleccionamos una *t2.micro* (1 CPU y 1GB de RAM) incluida en la capa gratuita.
+- Seleccionamos el par de claves *vockey* proporcionadas por el laboratorio.
+- Editamos la configuración de red.
+    - Incluimos la máquina en la subred pública creada.
+    - Habilitamos la asignación de una IP Pública.
+    - Creamos un grupo de seguridad (reglas de firewall) nuevo y lo llamamos *acceso-publico* y le ponemos una descripción (*acceso ssh a subred publica*)
+    - Como regla de entrada dejamos la que viene por defecto que habilita el puerto 22 (SSH) desde *cualquier lugar* de Internet (0.0.0.0/0)
+- Dejamos las opciones de almacenamiento que nos propone por defecto: 8GiB en un disco SSD de uso general.
+- Lanzamos la instancia.
+
+!!! note "Nota"
+
+    Hay que tener en cuenta que la dirección IP asignada será dinámica, por lo que si deseáramos que nuestra máquina fuera, por ejemplo, un servidor web, habría que asociarle una IP elástica, que equivale a asignarle una IP pública estática.
+
+<br>
 ___
 
-{:style="counter-reset:none"}
+### Conexión mediante SSH
 
-8.	Comenzamos creando la máquina *Ubuntu 01*:
-- El tamaño de la máquina será el mínimo para poder correr Ubuntu Server 22.04 (2GiB RAM serán suficientes para la prueba).
-- No será necesaria redundancia en las zonas de disponibilidad. 
-- El nombre del equipo será *ub01*.
-- El tipo de **autenticación será por Clave Pública SSH**. (Será necesaria la descarga de la clave privada al finalizar la creación).
-- Dejamos habilitado el puerto 22 para poder conectarnos a la máquina.
-- Por motivos de coste, el disco duro del sistema será de tipo HDD Estándar.
-- En el apartado Redes seleccionamos la red creada anteriormente, y la subred *subred-dmz*.
-- También seleccionamos la IP Pública creada antes *ip-ub01*.
-- En el grupo de seguridad seleccionamos Ninguno. Lo asociaremos a continuación.
+Al crear la instancia no nos ha preguntado por ningún usuario ni contraseña en el sistema operativo. AWS crea unos usuarios por defecto que varían dependiendo del tipo de AMI seleccionada. Se pueden consultar [aquí](https://docs.aws.amazon.com/es_es/AWSEC2/latest/UserGuide/managing-users.html#ami-default-user-names).
 
+Para conectarnos a la máquina mediante ssh lo debemos hacer con un par de claves. En nuestro caso le hemos indicado que utilizaríamos las del laboratorio (*vockey*), por tanto el primer es descargarnos el fichero de la clave.
+
+5.- Accedemos a la consola de lanzamiento del laboratorio y en *Detalles* pulsamos sobre la descarga del fichero PEM.
+
+<img src="images/creacion_MV_04.jpg" width=400>
+
+6.- Una vez descargado el fichero de clave debemos cambiar los permisos de dicho archivo:
+
+- En Linux: `chmod 400 labuser.pem`
+- En Windows: Dejamos únicamente los permisos para nuestro usuario, eliminando los accesos del resto de usuarios.
+
+7.- Lanzamos el ssh indicando el fichero de la clave privada descargada y sustituyendo por la url correspondiente:
+
+    ssh -i "labuser.pem" ubuntu@ec2-204-236-197-47.compute-1.amazonaws.com
+
+<br>
 ___
 
-{:style="counter-reset:none"}
+### Instalación de un servidor web
 
-9.	Una vez finalizada la implementación, ve al grupo de recursos y **en la interfaz de red** de la máquina recién creada, en el apartado **Grupo de Seguridad de Red**, asóciala al grupo *nsg-dmz*.
+Una vez dentro de la máquina vamos a instalar un servidor web.
 
+8.- Ejecutamos:
+
+    sudo apt update
+    sudo apt install apache2 -y
+
+<br>
 ___
 
-{:style="counter-reset:none"}
+### Acceso a la página web
 
-10.	Vamos ahora con la segunda máquina. Repite los pasos que con la máquina *Ubuntu 1* pero teniendo en cuenta lo siguiente:
-- El nombre del equipo será *ub02*.
-- El **tipo de autenticación será por contraseña**.
-- Dejamos habilitado el puerto 22 para poder conectarnos a la máquina.
-- Por motivos de coste, el disco duro del sistema será de tipo HDD Estándar.
-- En el apartado Redes seleccionamos la red creada anteriormente, y la subred *subred-privada*. 
-- **No tendrá IP Pública**.
-- En el grupo de seguridad seleccionamos Avanzado y asóciale el grupo de seguridad *nsg-privada*.
+9.- Una vez instalado el servidor Apache, accedemos desde el navegador de nuestra máquina local a la dirección IP Pública de  nuestra máquina.
 
-___
+A pesar de tener instalado y corriendo el servidor web, el navegador no es capaz de resolver la dirección puesto que en el firewall de la instancia (grupo de seguridad *acceso-publico*) sólo hemos permitido conexiones desde el puerto 22.
 
-{:style="counter-reset:none"}
+Vamos a permitir conexiones también del puerto 80 (http) añadiendo una nueva regla de entrada en el grupo de seguridad *acceso-publico*.
 
-11.	Una vez finalizada la implementación, ve al grupo de recursos y comprueba todos los recursos creados. Si todo ha ido bien se nos han debido crear los siguientes 11 recursos en nuestro Grupo de Recursos practica-3: (**compáralos con el esquema del enunciado**)
-- Dos máquinas virtuales (*ub01* y *ub02*).
-- Una red virtual (*red-asir*).
-- Dos grupos de seguridad (*nsg-dmz* y *nsg-privada*).
-- Una IP Pública (*ip-ub01*).
-- Dos discos duros (Uno por cada máquina). (No aparece en el esquema del enunciado)
-- Dos tarjetas de red (una por cada máquina). (No aparece en el esquema del enunciado)
-- Una clave SSH (para conectarnos a la máquina *ub01*).
+10.- En la consola de AWS, dentro del panel de VPC, accedemos al grupo de seguridad *acceso-publico* para editar sus propiedades:
+
+- En las Reglas de entrada añadimos una del tipo HTTP (Puerto TCP 80) para permitir accesos desde cualquier dirección (0.0.0.0/0).
+
+11.- Guardamos las reglas y ya podemos acceder desde el navegador a la página por defecto del servidor Apache instalado en nuestra máquina.
 
 ___
-
-{:style="counter-reset:none"}
-
-12.	Con las máquinas arrancadas, conéctate a *ub01* desde tu ordenador mediante `ssh` indicándole la IP Pública y con el parámetro `-i` la ubicación de la clave privada descargada.
-
-{: .warning }
-Al conectarnos con la clave privada descargada nos dará error de fichero inseguro. Para poder conectarnos sin problemas debemos establecer restricciones en los permisos (tanto en Windows como en Linux), dejando control total únicamente a nuestro usuario.
-
-___
-
-{:style="counter-reset:none"}
-
-13.	Comprueba en *ub01*, mediante el comando `ip a`, que la dirección IP privada de la tarjeta de red de la máquina está dentro del rango de direcciones de la subred *subred-dmz*.
-
-___
-
-{:style="counter-reset:none"}
-
-14.	Desde el portal de Azure, sitúate en la tarjeta de red de la máquina *ub02* y comprueba qué dirección IP se le ha asignado (debe estar dentro del rango de direcciones de la *subred-privada*).
-
-___
-
-{:style="counter-reset:none"}
-
-15.	Desde la máquina *ub01* conéctate mediante ssh a la máquina *ub02*, utilizando la dirección IP asignada. Al hacer la conexión desde la misma red de virtual, podemos conectarnos sin problemas según la configuración de seguridad que hemos hecho en *nsg-privada*.
-
-___
-
-{:style="counter-reset:none"}
-
-16.	Crea ahora en el grupo de recursos *práctica-3* una **nueva dirección IP Pública** llamada *ip-ub02* y asígnala a la interfaz de red de la máquina *ub02*.
-
-___
-
-{:style="counter-reset:none"}
-
-17.	Desde tu equipo, haz un ssh a la nueva dirección pública para poder conectarnos a *ub02* sin pasar por *ub01*. No debes poder establecer la conexión.
-
-{: .note }
-Fíjate que según las reglas de seguridad que hemos establecido, a la máquina *ub02* se puede acceder sin problemas desde la máquina *ub01*, pero no desde el exterior.
-
-___
-
-{:style="counter-reset:none"}
-
-18.	Añade una regla de entrada en el grupo de seguridad *nsg-privada* para permitir la conexión por ssh desde Internet, y comprueba que ya puedes conectarte desde tu equipo (deja pasar unos minutos antes de probarlo).
-
-___
-
-{:style="counter-reset:none"}
-
-19.	Apaga las máquinas y **elimina el grupo de recursos creado en el primer punto para asegurarnos que no dejamos ningún recurso consumiendo crédito**.
+<br>
