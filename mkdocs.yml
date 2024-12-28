@@ -1,6 +1,14 @@
 site_name: Prácticas en AWS para ASIR
 use_directory_urls: false
 
+nav:
+  - "Inicio": "index.md"
+  - "Creación de MV": "practica01.md"
+  - "Redes Virtuales":
+      - "Redes Virtuales": "practica03.md"
+      - "FAQ": "faq.md"
+  - "Bases de Datos": "practica06.md"
+
 theme:
     language: es
     name: "material"

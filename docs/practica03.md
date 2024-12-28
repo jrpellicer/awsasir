@@ -54,10 +54,12 @@ ___
 -	Seleccionamos una única zona de disponibilidad (AZ).
 -	Le decimos que nos cree una subred pública y otra privada.
 -	Personalizamos los bloques de direcciones de modo que las subredes tengan las siguientes direcciones:
-  -	Subred pública: 10.0.1.0/24
-  - Subred privada: 10.0.2.0/24
+    - Subred pública: 10.0.1.0/24
+    - Subred privada: 10.0.2.0/24
 -	Como deseamos que la subred privada tenga salida a Internet, creamos un **Gateway NAT** en 1 AZ (ojo, esto nos incrementará el coste considerablemente).
--	No vamos a conectar ningún bucket de S3, por tanto no seleccionamos ningún *Gateway de S3* en el apartado de *Puntos de enlace de la VPC*.
+-	No vamos a conectar ningún bucket de S3, por tanto **no seleccionamos** ningún *Gateway de S3* en el apartado de *Puntos de enlace de la VPC*.
+
+<br>
 
 <img src="images/VPC_02.png">
 
@@ -84,7 +86,7 @@ ___
 
 Al crearse la VPC se han creado 3 tablas de enrutamiento: una por defecto y dos asociadas a las 2 subredes que hemos creado. Las 2 tablas asociadas a las nuevas subredes son las siguientes:
 
-**Tabla de entutamiento de la subred privada:**
+**Tabla de entutamiento de la subred privada**
 
 !!! info inline end "Uso Típico"
 
@@ -106,7 +108,9 @@ Interpretación:
         Redirige el tráfico saliente destinado a Internet al NAT Gateway que se encuentra en la subred pública.
         El NAT Gateway permite que las instancias en la subred privada se comuniquen con Internet sin ser directamente accesibles desde él.
 
-**Tabla de entutamiento de la subred pública:**
+<br>
+
+**Tabla de entutamiento de la subred pública**
 
 !!! info inline end "Uso Típico"
 
