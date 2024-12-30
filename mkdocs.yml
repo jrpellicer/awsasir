@@ -6,7 +6,7 @@ nav:
   - "Creación de MV": "practica01.md"
   - "Redes Virtuales":
       - "Redes Virtuales": "practica03.md"
-      - "FAQ": "faq.md"
+      - "FAQ": "faqredes.md"
   - "Bases de Datos": "practica06.md"
 
 theme:
