@@ -7,7 +7,7 @@ nav:
   - "Redes Virtuales":
       - "Redes Virtuales": "practica03.md"
       - "FAQ": "faqredes.md"
-  - "Bases de Datos": "practica06.md"
+  - "Bases de Datos": "practica04.md"
 
 theme:
     language: es
