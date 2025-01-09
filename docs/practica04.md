@@ -55,7 +55,7 @@ ___
 
 <br>
 
-!!! warning "Atención"
+!!! note "Nota"
     
     Podríamos haber seleccionado el **método de creación rápida**, que nos pide muchos menos parámetros para crear la BBDD, pero nos habría dejado la opción de **Permitir Acceso Público** como **NO**. Ello implica que nos tocaría acceder a modificar los parámetros una vez creada la BBDD para permitir ese acceso público, y además deberíamos permitir la regla de entrada correspondiente en el grupo de seguridad.
 
@@ -87,29 +87,68 @@ ___
 <br>
 ___
 
-
-
 6.-	En nuestra máquina local establacemos una conexión mediante un cliente de MySQL de línea de comandos, indicando la cadena de conexión y el usuario que hemos definido como administrador. En el parámetro host `-h` ponemos el nombre del servidor (endpoint que hemos copiado en el portapapeles) y en el parámetro de usuario `-u` el nombre del usuario. Para que nos solicite el password indicamos el parámetro `-p`.
 
 `mysql -h database-jrpm.cruqs8qiedha.us-east-1.rds.amazonaws.com -u admin -p`
+
+Una vez comprobada la conexión, cerramos la sesión:
+
+`exit;`
 
 !!! warning "Atención"
     
     Si hemos dejado la opción de **Permitir Acceso Público** como **NO** o no aparece la regla de seguridad del firewall (grupo de seguridad) no podremos conectarnos.
 
-
+<br>
 ___
 
-{:style="counter-reset:none"}
+7.- Vamos a crear una base de datos con una tabla. Lo vamos a hacer mediante un script de sentencias sql. Para ello comenzamos con la descarga del fichero de creación de la base de datos.
 
-9.	Podemos establacer conexión remota también mediante clientes GUI como *DBeaver*, *HeidiSQL*, *MySQL Workbench*, ... Debemos tener la precaución al configurar la conexión en estos clientes de indicar también la ubicación del archivo descargado con el certificado SSL, en caso de tener en el servidor marcada la opción de *require_secure_transport* a *ON*.
+=== "Linux"
 
+    ```
+    wget https://github.com/jrpellicer/proyectoasir/raw/refs/heads/main/asir.sql
+    ```
+
+=== "Windows"
+
+    [Descarga fichero sql](./asir.sql)
+
+<br>
 ___
 
-{:style="counter-reset:none"}
+8.- Ejecutamos el contenido del fichero descargado.
 
-10.	Detén el servidor de BBDD y **elimina el grupo de recursos creado en el primer punto para asegurarnos que no dejamos ningún recurso consumiendo crédito**.
+```
+mysql -h database-jrpm.cruqs8qiedha.us-east-1.rds.amazonaws.com -u admin -p < asir.sql
+```
 
-{: .important }
-Si detenemos un servidor de BBDD, Azure lo iniciará automáticamente a los 30 días (si no lo hemos levantado nosotros de manera manual antes). Esto es peligroso, pues si olvidamos eliminar un recurso de BBDD que no utilizamos, se pondrá en marcha automáticamente a los 30 días de haberlo detenido, con el consiguiente consumo de crédito.
+<br>
+___
+
+9.- Comprobamos que se ha ejecutado correctamente y se ha creado la base de datos y la tabla correspondiente.
+
+```bash
+mysql -h database-jrpm.cruqs8qiedha.us-east-1.rds.amazonaws.com -u admin -p
+```
+
+```sql
+use webasir;
+select * from clientes;
+exit;
+```
+
+<br>
+___
+
+10.- Podemos establacer conexión remota también mediante clientes GUI como *DBeaver*, *HeidiSQL*, *MySQL Workbench*, ... 
+
+<br>
+___
+
+
+11.- Desde la consola de AWS, **elimina el servidor de BBDD creado para asegurarnos que no dejamos ningún recurso consumiendo crédito**.
+
+!!! warning "Atención"
+    Si detenemos un servidor de BBDD (sin eliminarlo), AWS lo iniciará automáticamente a los 7 días (si no lo hemos levantado nosotros de manera manual antes). Esto es peligroso, pues si olvidamos eliminar un recurso de BBDD que no utilizamos, se pondrá en marcha automáticamente a los 7 días de haberlo detenido, con el consiguiente consumo de crédito.
 
