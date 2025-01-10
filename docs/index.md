@@ -10,7 +10,7 @@ permalink: /
 
 Prácticas de contenidos del CFGS de ASIR para realizar en el portal AWS.
 
-[Iniciar ahora](practica01.html){ .md-button .md-button--primary }
+[Iniciar ahora](practica00.html){ .md-button .md-button--primary }
 [Ver en GitHub](https://github.com/jrpellicer/awsasir){ .md-button }
 
 El objetivo de estas prácticas es replicar en **AWS** algunas de las infraestructuras *on-premise* estudiadas durante el curso.
