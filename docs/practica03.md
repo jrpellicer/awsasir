@@ -46,7 +46,7 @@ ___
 
 ### Creación de la nueva VPC
 
-2.- Procedemos a crear la VPC:
+2.- Procedemos a crear la nueva VPC:
 
 -	Le decimos que queremos crear **la VPC y más**.
 -	Asignamos un nombre a la VPC, por ejemplo *practica02*
@@ -197,7 +197,7 @@ ___
 
 ### Acceso a la página web
 
-9.- Una vez instalado el servidor Apache, accedemos desde el navegador de nuestra máquina local a la dirección IP Pública de  nuestra máquina.
+9.- Una vez instalado el servidor Apache, accedemos desde el navegador de nuestra máquina local a la dirección IP Pública de  nuestra máquina AWS.
 
 A pesar de tener instalado y corriendo el servidor web, el navegador no es capaz de resolver la dirección puesto que en el firewall de la instancia (grupo de seguridad *acceso-publico*) sólo hemos permitido conexiones desde el puerto 22.
 

@@ -117,7 +117,7 @@ ___
 <br>
 ___
 
-8.- Ejecutamos el contenido del fichero descargado.
+8.- Ejecutamos las instrucciones SQL que hay en el contenido del fichero descargado. Basta con redireccionar la entrada del comando `mysql` con el fichero descargado de nombre `asir.sql`.
 
 ```
 mysql -h database-jrpm.cruqs8qiedha.us-east-1.rds.amazonaws.com -u admin -p < asir.sql
@@ -126,7 +126,7 @@ mysql -h database-jrpm.cruqs8qiedha.us-east-1.rds.amazonaws.com -u admin -p < as
 <br>
 ___
 
-9.- Comprobamos que se ha ejecutado correctamente y se ha creado la base de datos y la tabla correspondiente.
+9.- Comprobamos que se ha ejecutado correctamente y se ha creado la base de datos y la tabla correspondiente. Para ello volvemos a iniciar una conexión en el servidor MySQL y ejecutamos la consulta correspondiente:
 
 ```bash
 mysql -h database-jrpm.cruqs8qiedha.us-east-1.rds.amazonaws.com -u admin -p

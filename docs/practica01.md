@@ -14,9 +14,9 @@ En esta práctica vamos a crear en la nube una máquina virtual de Windows Serve
 - El volumen EBS asociado (el disco duro de la máquina virtual).
 - La red (VPC) y la subred virtual a la que está conectada la máquina.
 - Un Internet Gateway (puerta de enlace) para salir a Internet desde la red virtual.
-- Una dirección IP pública para conectarnos desde el exterior.
+- Una dirección IP Pública para conectarnos desde el exterior.
 - Una dirección IP Elástica (la IP pública, pero estática, para que no cambie al reiniciar la máquina).
-- Un grupo de seguridad para controlar los accesos.
+- Un grupo de seguridad (firewall) para controlar los accesos.
 
 
 ## Esquema en AWS

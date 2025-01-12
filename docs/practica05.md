@@ -18,13 +18,20 @@ En una subred pública de la VPC crearemos una máquina virtual accesible desde 
 <img src="images/BBDD2.drawio.png">
 
 ## Práctica a Realizar
-1.-	Eliminamos la VPC por defecto y nos aseguramos que no hay ningún recurso creado en anteriores prácticas (grupos de seguridad, NAT Gateway, instancias EC2, bases de datos, ...)
+1.-	Eliminamos la *VPC predeterminada* y nos aseguramos que no hay ningún recurso creado en anteriores prácticas (grupos de seguridad, NAT Gateway, instancias EC2, bases de datos, ...)
 
 <br>
 ___
 
+### Creación de la VPC y la máquina EC2
 
-2.-	Creamos una nueva VPC con dos AZs y con 2 subredes públicas (10.0.1.0/24 y 10.0.2.0/24) y dos privadas (10.0.3.0/24 y 10.0.4.0/24), cada una en una AZ.
+2.-	Creamos una nueva VPC con la siguientes características:
+
+- El bloque de CIDR será 10.0.0.0/16
+- Debe tener 2 AZs.
+- 2 Subredes públicas (10.0.1.0/24 y 10.0.2.0/24) cada una en una AZ.
+- 2 Subredes privadas (10.0.3.0/24 y 10.0.4.0/24) cada una en una AZ.
+- No es necesario un *Gateway NAT* ni un *Gateway de S3*
 
 !!! note "Nota"
 
@@ -34,25 +41,63 @@ ___
 ___
 
 
-3.-	Creamos una instancia EC2 en la primera subred pública (AMI Ubuntu). En datos usuarios poner la instalación de mysql-client-core-8.0
+3.-	Vamos a crear una instancia EC2 en la primera subred pública:
+
+- La imagen será la AMI de Ubuntu.
+- El tamaño será suficiente con un tipo de instancia *t2.micro*.
+- El par de claves utilizaremos el del laboratorio (*vockey*).
+- La ubicamos en la primera subred pública (*subnet-public1*).
+- Le asignamos una IP Pública para poder conectarnos desde Internet.
+- Nos aseguramos que se crea una regla de firewall para permitir las conexiones por el puerto SSH (22).
+- Para hacer que durante el primer lanzamiento de la instrancia se instale el cliente de MySQL ponemos las siguientes líneas en el apartado de **Datos de usuario**:
+```bash
+#!/bin/bash
+apt update
+apt install -y  mysql-client-core-8.0
+```
 
 <br>
 ___
 
 
-4.-	Nos conectamos por ssh para comprobar que todo funciona.
+4.-	Una vez creada la instancia EC2 comprobamos su IP pública y nos conectamos por ssh desde nuestra máquina local para comprobar que todo funciona.
+
+<br>
+___
+
+### Creación de la Base de Datos
+
+El primer requisito para crear una base de datos RDS es definir un **grupo de subredes de bases de datos** en nuestra VPC. 
+
+!!! info
+    Un grupo de subredes de bases de datos es una colección de subredes dentro de una VPC que RDS utiliza para desplegar instancias de bases de datos. Permite especificar en qué subredes y zonas de disponibilidad se pueden alojar las bases de datos. Es necesario que al menos contenga 2 AZ, por eso la necesidad de crear nuestra VPC con al menos 2 zonas de disponibilidad, aunque solamente utilicemos una.
+
+5.-	Accedemos a la consola de RDS y creamos **grupo de subredes** con las 2 subredes privadas:
+
+- Seleccionamos las 2 zonas de disponibilidad de nuestra VPC (en principio serán *us-east-1a* y *us-east-1b*).
+- Seleccionamos las 2 subredes privadas (*subnet-private1* y *subnet-private2*), puesto que deseamos crear nuestra base de datos dentro de una de las subredes privadas.
+
+<img src="./images/BBDD2_01.png">
+
 
 <br>
 ___
 
 
-5.-	Creamos grupo de subredes con las 2 subredes privadas.
+6.-	Ahora sí creamos una Base de Datos RDS:
 
-<br>
-___
-
-
-6.-	Creamos una DB RDS.
+- Seleccionamos el método de *creación estándar*.
+- Como motor de base de datos elegimos **MySQL**.
+- La plantilla sobre la que se va a basar será la *Capa gratuita* (las demás no son aptas para el laboratorio).
+- Ponemos un nombre de servidor que debe ser único en nuestra cuenta de AWS.
+- Asignamos nombre de usuario administrador y su contraseña.
+- Dejamos las opciones por defecto del tamaño de la instancia y el almacenamiento.
+- En el apartado **Conectividad**:
+    - Indicamos que vamos a conectar nuestra base de datos a una instancia EC2 y la seleccionamos en el desplegable.
+    - En el *Grupo de subredes* elegimos la existente que hemos creado en el punto anterior.
+    - NO permitimos el *Acceso Público* a nuestra BBDD. 
+    - Elegimos como *grupo de seguridad*, el existente por defecto. Nos informa que además se creará un nuevo grupo de seguridad para conectar la instancia EC2 con la RDS.
+- Los demás campos los dejamos por defecto.
 
 <br>
 ___
@@ -65,6 +110,9 @@ ___
 <br>
 ___
 
+### Eliminación de los recursos creados
+
+Una vez comprobada la conexión, para finalizar la práctica eliminamos los recursos creados.
 
 8.- Desde la consola de AWS, **elimina el servidor de BBDD creado para asegurarnos que no dejamos ningún recurso consumiendo crédito**. No crees ninguna instantánea final ni conserves las copias de seguridad.
 
@@ -86,123 +134,3 @@ ___
 
 <br>
 ___
-1.-  Accedemos a la consola, dentro de la categoría Bases de Datos, seleccionamos el recurso **RDS**.
-
-<br>
-___
-
-
-2.-	Creamos una Base de Datos:
-
-- Seleccionamos el método de *creación estándar*.
-- Como motor de base de datos elegimos **MySQL**.
-- La plantilla sobre la que se va a basar será la *Capa gratuita* (las demás no son aptas para el laboratorio).
--	Ponemos un nombre de servidor que debe ser único en nuestra cuenta de AWS. Introduce uno que lleve tu nombre o iniciales.
--	Asignamos nombre de usuario administrador y su contraseña.
-- Dejamos las opciones por defecto del tamaño de la instancia y el almacenamiento.
-- No vamos a conectar nuestra BBDD a ninguna instancia EC2, y dejamos la BBDD en la VPC por defecto (*Default VPC*).
--	**Importante**: Permitimos el *Acceso Público* a nuestra BBDD. Esto generará una IP Pública para poder conectarnos desde Internet.
-- Creamos un nuevo *grupo de seguridad*, por ejemplo *bbdd-sg*
--	Los demás campos los dejamos por defecto.
-
-<br>
-
-!!! note "Nota"
-    
-    Podríamos haber seleccionado el **método de creación rápida**, que nos pide muchos menos parámetros para crear la BBDD, pero nos habría dejado la opción de **Permitir Acceso Público** como **NO**. Ello implica que nos tocaría acceder a modificar los parámetros una vez creada la BBDD para permitir ese acceso público, y además deberíamos permitir la regla de entrada correspondiente en el grupo de seguridad.
-
-<br>
-___
-
-
-3.-	Una vez creado el recurso accedemos a él y en el apartado **Conectividad y seguridad** comprobamos el endpoint y el puerto por al cual accederemos. **Copiamos el punto de enlace en el portapapeles.**
-
-
-Comprobamos también que se nos ha asociado el nuevo grupo de seguridad que hemos creado.
-
-<br>
-
-<img src="./images/BBDD_01.png">
-<br>
-___
-
-4.-	En el apartado de *Configuración* nos aparecen los datos de la configuración de la máquina virtual sobre la que está corriendo nuestro SGBD, así como la versión de MySQL instalada y el nombre del usuario administrador.
-
-<br>
-___
-
-5.-	Volvemos al apartado de *Conectividad y seguridad* y accedemos al grupo de seguridad *bbdd-sg* que se nos ha creado para ver las reglas de firewall que nos ha puesto por defecto. En las reglas de entrada comprobamos que se ha creado la regla para permitir conexiones desde nuestra IP local a la BBDD por el puerto de MySQL (3306).
-
-<br>
-
-<img src="./images/BBDD_02.png">
-<br>
-___
-
-6.-	En nuestra máquina local establacemos una conexión mediante un cliente de MySQL de línea de comandos, indicando la cadena de conexión y el usuario que hemos definido como administrador. En el parámetro host `-h` ponemos el nombre del servidor (endpoint que hemos copiado en el portapapeles) y en el parámetro de usuario `-u` el nombre del usuario. Para que nos solicite el password indicamos el parámetro `-p`.
-
-`mysql -h database-jrpm.cruqs8qiedha.us-east-1.rds.amazonaws.com -u admin -p`
-
-Una vez comprobada la conexión, cerramos la sesión:
-
-`exit;`
-
-!!! warning "Atención"
-    
-    Si hemos dejado la opción de **Permitir Acceso Público** como **NO** o no aparece la regla de seguridad del firewall (grupo de seguridad) no podremos conectarnos.
-
-<br>
-___
-
-7.- Vamos a crear una base de datos con una tabla. Lo vamos a hacer mediante un script de sentencias sql. Para ello comenzamos con la descarga del fichero de creación de la base de datos.
-
-=== "Linux"
-
-    ```
-    wget https://github.com/jrpellicer/proyectoasir/raw/refs/heads/main/asir.sql
-    ```
-
-=== "Windows"
-
-    [Descarga fichero sql](./asir.sql)
-
-<br>
-___
-
-8.- Ejecutamos el contenido del fichero descargado.
-
-```
-mysql -h database-jrpm.cruqs8qiedha.us-east-1.rds.amazonaws.com -u admin -p < asir.sql
-```
-
-<br>
-___
-
-9.- Comprobamos que se ha ejecutado correctamente y se ha creado la base de datos y la tabla correspondiente.
-
-```bash
-mysql -h database-jrpm.cruqs8qiedha.us-east-1.rds.amazonaws.com -u admin -p
-```
-
-```sql
-use webasir;
-select * from clientes;
-exit;
-```
-
-<br>
-___
-
-10.- Podemos establacer conexión remota también mediante clientes GUI como *DBeaver*, *HeidiSQL*, *MySQL Workbench*, ... 
-
-<br>
-___
-
-
-11.- Desde la consola de AWS, **elimina el servidor de BBDD creado para asegurarnos que no dejamos ningún recurso consumiendo crédito**. No crees ninguna instantánea final ni conserves las copias de seguridad.
-
-!!! warning "Atención"
-    Si detenemos un servidor de BBDD (sin eliminarlo), AWS lo iniciará automáticamente a los 7 días (si no lo hemos levantado nosotros de manera manual antes). Esto es peligroso, pues si olvidamos eliminar un recurso de BBDD que no utilizamos, se pondrá en marcha automáticamente a los 7 días de haberlo detenido, con el consiguiente consumo de crédito.
-
-
-<img src="./images/BBDD_03.png" width=400>
