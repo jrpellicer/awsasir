@@ -11,6 +11,7 @@ nav:
   - "Bases de Datos": 
       - "Base de datos pública": "practica04.md"
       - "Base de datos privada": "practica05.md"
+  - "Despliegue web con Beanstalk": "practica06.md"
 
 theme:
     language: es

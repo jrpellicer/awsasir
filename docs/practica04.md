@@ -4,7 +4,7 @@ title: Bases de Datos
 nav_order: 4
 ---
 
-# Bases de Datos Gestionadas
+# Bases de Datos Gestionadas (con acceso público)
 
 ## Objetivo del Proyecto
 
