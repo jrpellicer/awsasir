@@ -53,10 +53,15 @@ ___
 - En el apartado subredes de instancia seleccionamos las 2 subredes creadas.
 - Los demás campos los dejamos sin marcar (no creamos ninguna BBDD ni asignamos IP Pública)
 
+
+!!! note "Nota"
+
+    Podríamos haber creado aquí una Base de Datos que se conecte a la aplicación, pero no lo hacemos en este momento. Veremos cómo conectar más tarde una BBDD que ya esté creada.
+
 <br>
 ___
 
-### Comprobación del funciomaniento
+### Comprobación del funcionamiento
 
 4.-	Una vez lanzado el entorno correctamente y cuando su estado aparezca *Ok*, comprobamos su Dominio y lo abrimos en el navegador (simplemente pibchando encima) para comprobar que todo funciona. Nos debe aparecer una web con el código de ejemplo en la que aparece *Congratulations!*
 
@@ -73,7 +78,10 @@ Esel momento de cargar un código propio a nuestra aplicación de Beanstalk. Vam
 
 !!! warning "Atención"
 
-    Para subir la aplicación a Beanstalk necesitamos un fichero .zip (o un fichero .tar.gz) pero no nos vale el que acabamos de descargar. El descargado contiene una carpeta con los ficheros de la página web en ella, pero Beanstalk necesita que los ficheros estén en la raíz del fichero .zip (sin carpeta).
+    Para subir la aplicación a Beanstalk necesitamos un fichero `.zip` (o un fichero `.tar.gz`) pero no nos vale el que acabamos de descargar. El descargado contiene una carpeta con los ficheros de la página web en ella, pero Beanstalk necesita que los ficheros estén en la raíz del fichero `.zip` (sin carpeta).
+
+<br>
+___
 
 6.- Una vez descargado el código vamos a descomprimir el archivo para después volver a comprimirlo, pero sin incluir los archivos en ninguna carpeta comprimida.
 
@@ -91,13 +99,30 @@ Esel momento de cargar un código propio a nuestra aplicación de Beanstalk. Vam
     4. Vuelve a comprimir seleccionando todos los ficheros: `zip -r ../codigo.zip *`
     5. Nos ha dejado en el directorio padre un fichero llamado *codigo.zip* listo para ser subido.
 
+<br>
+___
 
+7.- Volvemos a la consola de AWS y en la pantalla de nuestro Entorno de la aplicación de Beanstalk pulsamos sobre el botón **Cargar e implementar**.
+
+<img src="images/Beanstalk_2.jpg">
 
 <br>
 ___
 
+8.- Subimos el archivo `.zip` con nuestro código generado en el paso anterior e implementamos.
 
-6.-	Ahora sí creamos una Base de Datos RDS:
+Esperamos a que se actualice el entorno y accedemos al dominio web para comprobar los cambios.
+
+<br>
+___
+
+### Conexión a una BBDD
+
+Es bastante probable que en nuestros proyectos web deseemos conectar una base de datos para interactuar con ella. Si accedemos a nuestra página web cargada veremos que hay un botón que pone `Ver Listado` que da error al pulsarlo, pues ejecuta un código PHP que se conecta a una base de datos que no existe.
+
+El primer paso será crear una BBDD RDS.
+
+6.-	Accedemos a la consola de RDS y creamos una Base de Datos:
 
 - Seleccionamos el método de *creación estándar*.
 - Como motor de base de datos elegimos **MySQL**.
@@ -106,10 +131,8 @@ ___
 - Asignamos nombre de usuario administrador y su contraseña.
 - Dejamos las opciones por defecto del tamaño de la instancia y el almacenamiento.
 - En el apartado **Conectividad**:
-    - Indicamos que vamos a conectar nuestra base de datos a una instancia EC2 y la seleccionamos en el desplegable.
-    - En el *Grupo de subredes* elegimos la existente que hemos creado en el punto anterior.
-    - NO permitimos el *Acceso Público* a nuestra BBDD. 
-    - Elegimos como *grupo de seguridad*, el existente por defecto. Nos informa que además se creará un nuevo grupo de seguridad para conectar la instancia EC2 con la RDS.
+    - Permitimos el *Acceso Público* a nuestra BBDD (para poder conectarnos desde nuestra máquina local y cargar datos).
+    - Elegimos como *grupo de seguridad*, el existente por defecto. 
 - Los demás campos los dejamos por defecto.
 
 <br>
