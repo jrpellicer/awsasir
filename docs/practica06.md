@@ -15,7 +15,7 @@ AWS Elastic Beanstalk admite aplicaciones web escritas en varios lenguajes y mar
 
 ## Esquema en AWS
 
-<img src="images/BBDD2.drawio.png">
+<img src="images/Beanstalk.drawio.png">
 
 ## Práctica a Realizar
 1.-	Eliminamos la *VPC predeterminada* y nos aseguramos que no hay ningún recurso creado en anteriores prácticas (grupos de seguridad, NAT Gateway, instancias EC2, bases de datos, ...)
@@ -63,7 +63,7 @@ ___
 
 ### Comprobación del funcionamiento
 
-4.-	Una vez lanzado el entorno correctamente y cuando su estado aparezca *Ok*, comprobamos su Dominio y lo abrimos en el navegador (simplemente pibchando encima) para comprobar que todo funciona. Nos debe aparecer una web con el código de ejemplo en la que aparece *Congratulations!*
+4.-	Una vez lanzado el entorno correctamente y cuando su estado aparezca *Ok*, comprobamos su Dominio y lo abrimos en el navegador (simplemente haciendo click encima) para comprobar que todo funciona. Nos debe aparecer una web con el código de ejemplo en la que aparece *Congratulations!*
 
 <img src="images/Beanstalk_1.jpg">
 
@@ -78,7 +78,7 @@ Esel momento de cargar un código propio a nuestra aplicación de Beanstalk. Vam
 
 !!! warning "Atención"
 
-    Para subir la aplicación a Beanstalk necesitamos un fichero `.zip` (o un fichero `.tar.gz`) pero no nos vale el que acabamos de descargar. El descargado contiene una carpeta con los ficheros de la página web en ella, pero Beanstalk necesita que los ficheros estén en la raíz del fichero `.zip` (sin carpeta).
+    Para subir la aplicación a Beanstalk necesitamos un fichero `.zip` (o un fichero `.tar.gz`) pero no nos vale el que acabamos de descargar. El descargado contiene una carpeta con los archivos de la página web en ella, pero Beanstalk necesita que los archivos estén en la raíz del fichero `.zip` (sin carpeta).
 
 <br>
 ___
@@ -118,7 +118,7 @@ ___
 
 ### Conexión a una BBDD
 
-Es bastante probable que en nuestros proyectos web deseemos conectar una base de datos para interactuar con ella. Si accedemos a nuestra página web cargada veremos que hay un botón que pone `Ver Listado` que da error al pulsarlo, pues ejecuta un código PHP que se conecta a una base de datos que no existe.
+Es bastante probable que en nuestros proyectos web deseemos conectar una base de datos para interactuar con ella. Si accedemos a nuestra página web cargada, veremos que hay un botón que pone `Ver Listado` que da error al pulsarlo, pues ejecuta un código PHP que se conecta a una base de datos que no existe.
 
 El primer paso será crear una BBDD RDS.
 
@@ -131,6 +131,7 @@ El primer paso será crear una BBDD RDS.
 - Asignamos nombre de usuario administrador y su contraseña.
 - Dejamos las opciones por defecto del tamaño de la instancia y el almacenamiento.
 - En el apartado **Conectividad**:
+    - Seleccionamos la VPC en la que está ubicado nuestro proyecto de Beanstalk.
     - Permitimos el *Acceso Público* a nuestra BBDD (para poder conectarnos desde nuestra máquina local y cargar datos).
     - Elegimos como *grupo de seguridad*, el existente por defecto. 
 - Los demás campos los dejamos por defecto.
@@ -139,12 +140,97 @@ El primer paso será crear una BBDD RDS.
 ___
 
 
-7.-	Iniciamos sesión desde la máquina ubuntu y comprobamos que podemos conectarnos a la instancia MySQL, indicando la cadena de conexión y el usuario que hemos definido como administrador. En el parámetro host `-h` ponemos el nombre del servidor y en el parámetro de usuario `-u` el nombre del usuario. Para que nos solicite el password indicamos el parámetro `-p`.
-
-`mysql -h database-jrpm.cruqs8qiedha.us-east-1.rds.amazonaws.com -u admin -p`
+7.- Accedemos al *Grupo de seguridad* asociado a la base de datos y editamos las reglas de entrada para permitir el acceso al puerto MYSQL/Aurora (3306) desde todas las direcciones (0.0.0.0/0)
 
 <br>
 ___
+
+
+8.- En nuestra máquina local nos conectamos a la base de datos mediante el comando `mysql` y comprobamos la conexión.
+
+<br>
+___
+
+
+9.- Vamos a crear una base de datos con una tabla. Lo vamos a hacer mediante un script de sentencias sql. Para ello comenzamos con la descarga del fichero de creación de la base de datos.
+
+=== "Linux"
+
+    ```
+    wget https://github.com/jrpellicer/proyectoasir/raw/refs/heads/main/asir.sql
+    ```
+
+=== "Windows"
+
+    [Descarga fichero sql](./asir.sql)
+
+<br>
+___
+
+8.- Ejecutamos las instrucciones SQL que hay en el contenido del fichero descargado. Basta con redireccionar la entrada del comando `mysql` con el fichero descargado de nombre `asir.sql`.
+
+```
+mysql -h database-jrpm.cruqs8qiedha.us-east-1.rds.amazonaws.com -u admin -p < asir.sql
+```
+
+!!! warning "Atención"
+
+    Una vez creadas las tablas y los datos de la base de datos, podríamos modificar las reglas de entrada del grupo de seguridad para eliminar el acceso desde Internet al puerto 3306.
+
+<br>
+___
+
+
+Una vez creada la base de datos, vamos a enlazarla con la aplicación de Beanstalk mediante el paso de variables de entorno con los datos de la base de datos que acabamos de crear (Host, Puerto, Usuario, Contraseña y Nombre de la BD).
+
+9.- Accedemos a la consola de Beanstalk y seleccionamos nuestro entorno.
+
+<br>
+___
+
+
+10.- En el panel de navegación seleccionamos *Configuración*:
+
+- En la categoría de configuración *Actualizaciones, monitoreo y registro*, seleccionamos *Editar*.
+- En la sección *Propiedades del entorno* (la última) definimos las variables (*propiedades*) que leerá la aplicación para crear la cadena de conexión. Hay que mantener los nombres y poner su correspondiente valor:
+    - RDS_HOSTNAME
+    - RDS_PORT
+    - RDS_DB_NAME
+    - RDS_USERNAME
+    - RDS_PASSWORD
+
+!!! note "Nota"
+
+    El valor de cada variable será el definido en la base de datos RDS que hemos creado. *RDS_HOSTNAME* será la cadena de conexión. *RDS_PORT* será el 3306, *RDS_DB_NAME* será *webasir* (se ha creado en el script) y los demás datos serán los que hayamos definido en el momento de la creación.
+
+<img src="images/Beanstalk_3.jpg">
+
+<br>
+___
+
+### Modificación del código
+
+Una vez definidas las variables de entorno con sus valores es momento de utilizarlas en la página *listado.php*.
+
+11.- En la máquina local nos situamos en el directorio donde habíamos descomprimido el código fuente de nuestra aplicación y con un editor accedemos al fichero `listado.php`.
+
+<br>
+___
+
+12.- Modificamos las líneas del código de las variables de conexión para que utilicen las variables de entorno creadas:
+
+<img src="images/Beanstalk_4.jpg">
+
+<br>
+___
+
+13.- Volvemos a crear el archivo zip y lo subimos al entorno.
+
+<br>
+___
+
+14.- Comprobamos que la aplicación accede a la base de datos y ya funciona el listado.
+
 
 ### Eliminación de los recursos creados
 
@@ -161,7 +247,9 @@ Una vez comprobada la conexión, para finalizar la práctica eliminamos los recu
 <br>
 ___
 
-9.- Desde la consola de AWS, **elimina la instancia EC2**. 
+9.- Desde la consola de AWS, **elimina la aplicación de Elastic Beanstalk**. 
+
+Al eliminar la aplicación se terminará el entorno sobre el que corre.
 
 <br>
 ___
