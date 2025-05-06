@@ -157,7 +157,7 @@ ___
 === "Linux"
 
     ```
-    wget https://github.com/jrpellicer/awsasir/blob/6412296fcf8fc21b6a794e48c692dd0f36883bcd/docs/asir.sql
+    wget https://raw.githubusercontent.com/jrpellicer/awsasir/refs/heads/main/docs/asir.sql
     ```
 
 === "Windows"
